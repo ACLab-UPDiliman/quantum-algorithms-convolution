@@ -295,4 +295,4 @@ print 'normalized z probabilities:',z_normalized_probability
 v = convolve(x,y,mode='full')
 print 'v:',v
 
-# now
+# sample change
