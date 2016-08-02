@@ -295,4 +295,4 @@ print 'normalized z probabilities:',z_normalized_probability
 v = convolve(x,y,mode='full')
 print 'v:',v
 
-# sample change with tag commit
+# sample change with tag commits
