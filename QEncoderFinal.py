@@ -1,7 +1,7 @@
 # QEncoder sub-routine
 from numpy import kron, dot, identity, array
 from math import ceil, log,sqrt
-from QOperators import ket0, ket1, H2x2, IQFT, QFT
+from QOperators import ket0, ket1, H2x2, iqft, qft
 from QDeleter import qdelete_matrix, qdelete_arbitrary
 
 #============ methods ================
@@ -82,8 +82,8 @@ def qencode(T,P):
 	# qRegP_state = dot(H,qRegP_state)
 
 	# create an (N+M-1)-dimension uniform quantum superposition state
-	qRegT_state = QFT(qRegT_state)
-	qRegP_state = QFT(qRegP_state)
+	qRegT_state = qft(qRegT_state)
+	qRegP_state = qft(qRegP_state)
 	# print '===================================='
 	# print 'QRegT in uniform superposition state: ' + str(qRegT_state)
 	# print 'QRegP in uniform superposition state: ' + str(qRegP_state)

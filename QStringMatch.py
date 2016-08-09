@@ -6,7 +6,7 @@ from CEncoder import cencode_BIV_a, cencode_BIV_b
 from QDeleter import qdelete_matrix, qdelete_arbitrary
 from QEncoderFinal import qencode
 from QConvolute import qconvolute
-from QOperators import QFT, IQFT, Euclid_Norm, Euclid_Norm_Squared
+from QOperators import qft, iqft, euclid_norm, Euclid_Norm_Squared
 
 def construct_U_M(convolute):
 	dim = convolute.shape[0]
@@ -20,7 +20,7 @@ def construct_U_M(convolute):
 
 	denum = empty(dim)
 	for i in xrange(0,dim):
-		denum[i] = Euclid_Norm(num[i]) 
+		denum[i] = euclid_norm(num[i])
 
 	m = zeros(shape=(dim,dim))
 	for i in xrange(0,dim):
@@ -34,13 +34,13 @@ def construct_U_M(convolute):
 def constructU_z(convolute, encoding_state_T):
 	dim = convolute.shape[0]
 	z = identity(dim)
-	qft_T = QFT(encoding_state_T)
+	qft_T = qft(encoding_state_T)
 	sum = 0.0
 	for i in xrange(0,dim):
-		sum = sum + 1.0/Euclid_Norm(qft_T[i])
+		sum = sum + 1.0 / euclid_norm(qft_T[i])
 	for j in xrange(M-1,N):
 		numerator = (1.0/2.0) + (((M/dim)*sum)/(2*convolute[j]))
-		denumerator = Euclid_Norm(numerator)
+		denumerator = euclid_norm(numerator)
 		z[j][j] = numerator/denumerator
 
 	return z
