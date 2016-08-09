@@ -207,4 +207,4 @@ class StringStateEncoding(object):
         return self.quantum_state_encoding
 
     def to_string(self):
-        return 'Symbol:',self.symbol,' Quantum state encoding:',self.quantum_state_encoding
+        return 'Symbol:' + self.symbol + ' Quantum state encoding:' + str(self.quantum_state_encoding)

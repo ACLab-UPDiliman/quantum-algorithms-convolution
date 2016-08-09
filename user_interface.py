@@ -8,7 +8,7 @@
 ############################## IMPORTS ############################
 from numpy import zeros
 from math import sqrt
-from QConvolute import StringStateEncoding
+from QConvolute import StringStateEncoding, qconvolute
 ###################################################################
 
 ############################## INPUT ##############################
@@ -38,34 +38,30 @@ for (symbol_index,symbol) in enumerate(alphabet):
     # Create quantum states only for symbols present in both text and pattern.
     if text.count(symbol) > 0 and pattern.count(symbol) > 0:
         # Create quantum states for text.
-        text_bin_ind = zeros(L)
+        text_quantum_state = zeros(L)
         text_symbol_count = text.count(symbol)
         for (text_index,text_symbol) in enumerate(text):
             if text_symbol == symbol:
-                text_bin_ind[text_index] = sqrt(1.0/text_symbol_count)
-        text_state_encoding = StringStateEncoding(symbol,text_bin_ind)
-        pattern_quantum_states.append(text_bin_ind)
-        print 'Symbol:', symbol, ' Text quantum state:',text_quantum_states[symbol_index]
+                text_quantum_state[text_index] = sqrt(1.0 / text_symbol_count)
+        text_quantum_states.append(StringStateEncoding(symbol, text_quantum_state))
+        print 'Text quantum state encoding >>', text_quantum_states[symbol_index].to_string()
 
         # Create quantum states for pattern.
-        pattern_bin_ind = zeros(L)
+        pattern_quantum_state = zeros(L)
         pattern_symbol_count = pattern.count(symbol)
         for (pattern_index, pattern_symbol) in enumerate(pattern):
             if pattern_symbol == symbol:
-                pattern_bin_ind[pattern_index] = sqrt(1.0/pattern_symbol_count)
-        pattern_quantum_states.append(pattern_bin_ind)
-        print 'Symbol:', symbol, ' Pattern quantum state:', pattern_quantum_states[symbol_index]
-
-
+                pattern_quantum_state[pattern_index] = sqrt(1.0 / pattern_symbol_count)
+        pattern_quantum_states.append(StringStateEncoding(symbol, pattern_quantum_state))
+        print 'Pattern quantum state >>', pattern_quantum_states[symbol_index].to_string()
 ###################################################################
 
 ############################## PROCESS #############################
 # For each pair of binary indicator sequences T_symbol and P_symbol
 # for counter in xrange(0,iteration_count):
-#     for i in xrange(0, len(text_quantum_states)):
-#     #### Execute Algorithm B
-#         output_index = qcon(text_quantum_states[i], pattern_quantum_states[i])
-
+    for i in xrange(0, len(text_quantum_states)):
+        # Execute Algorithm B
+        output = qconvolute(text_quantum_states[i].get_quantum_state_encoding(), pattern_quantum_states[i].get_quantum_state_encoding())
 
 ###################################################################
 
