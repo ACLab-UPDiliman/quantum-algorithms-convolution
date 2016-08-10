@@ -12,16 +12,6 @@ import matplotlib.pyplot as plotter
 from QOperators import qft, iqft, euclid_norm
 
 
-# T = ['b','b','a']
-# P = ['b','a']
-# N = len(T)
-# M = len(P)
-# dim = N + M - 1
-# P.reverse()
-# encoding_state_T = (1.0/sqrt(N)) * array([1.0, 1.0, -1.0, 0.0])
-# encoding_state_P = (1.0/sqrt(M)) * array([-1.0, 1.0, 0.0, 0.0])
-
-
 def construct_v(a):
     """a function for constructing the unitary matrix operator V with diagonal elements as the normalized values of the qft of quantum state corresponding to a binary indicator sequence of the pattern
 
@@ -30,6 +20,7 @@ def construct_v(a):
     :return: a unitary matrix with the normalized values of vector a as diagonal elements
     :rtype: ndarray
     """
+    # TODO: construct operator V as tensor product of a decomposition of elementary unitary operators
     dim = a.shape[0]
     v = zeros(shape=(dim, dim), dtype=complex)
     for i in xrange(0, dim):
@@ -115,90 +106,23 @@ def prettyprint(a):
     return string
 
 
-def qconvolute(encoding_state_T, encoding_state_P):
-    dim = encoding_state_T.shape[0]
-    # print '================================================='
-    # print 'encoding_state_T = ' + str(encoding_state_T)
-    # print 'encoding_state_P = ' + str(encoding_state_P)
-    # print 'encoding state\'s dimension = ' + str(dim)
-    # print 'N = ' + str(N)
-    # print 'M = ' + str(M)
-    # print '=================================================\n'
+def q_convolute(text_state_encoding, pattern_state_encoding):
+    """
+    compute the quantum convolution of input quantum states corresponding to two real or complex sequences
+    :param text_state_encoding: array of floats corresponding to a quantum state which encodes a binary indicator sequence of input text
+    :param pattern_state_encoding: array of floats corresponding to a quantum state which encodes a binary indicator sequence of input pattern
+    :type text_state_encoding: array of floats
+    :type pattern_state_encoding: array of floats
+    :return: an ndarray of floats corresponding to the quantum convolution of input quantum states
+    :rtype: ndarray
+    """
+    qft_text = qft(text_state_encoding)
+    qft_pattern = qft(pattern_state_encoding)
+    v = construct_v(qft_text)
+    v_qft_pattern = dot(v, qft_pattern)
+    quantum_convolution = iqft(v_qft_pattern)
 
-    # ====== Text =======
-    # print '================================================='
-    qft_T = qft(encoding_state_T)
-    print 'Amplitudes of qft for T'
-    print prettyprint(qft_T)
-    # probabilities = getProbabilities(qft_T)
-    # totalProbability = getTotalProbabilities(probabilities)
-    # print 'Probabilities after qft T = ' + str(probabilities)
-    # print 'Total probabilities after qft T = ' + str(totalProbability) + '\n'
-
-    ## dft_T = getDFTFromQFT(qft_T,N)
-    ## print 'DFT(T) derived from QFT_T = ' + str(dft_T)
-    # print '=================================================\n'
-
-    # ====== Pattern ========
-    # print '================================================='
-    qft_P = qft(encoding_state_P)
-    print 'Amplitudes of qft for P'
-    print prettyprint(qft_P)
-    # probabilities = getProbabilities(qft_P)
-    # print 'Probabilities after qft P = ' + str(probabilities)
-    # print 'Total probabilities after qft P = ' + str(totalProbability) + '\n'
-
-    ## dft_P = getDFTFromQFT(qft_P,M)
-    ## print 'DFT(P) derived from QFT_P = ' + str(dft_P)
-    # print '=================================================\n'
-
-    # ====== V(qft(P)) ========
-    # V = construct_v(qft_T)
-    V = construct_v(qft_P)
-    print 'V: '
-    print V
-
-    # V_QFT_P = dot(V, qft_P)
-    V_QFT_T = dot(V, qft_T)
-    # print 'Amplitudes of V on qft of P'
-    print 'Amplitudes of V on qft of T'
-    # print prettyprint(V_QFT_P)
-    print prettyprint(V_QFT_T)
-    # probabilities = getProbabilities(V_QFT_P)
-    # totalProbability = getTotalProbabilities(probabilities)
-    # print 'Probabilities after V = ' + str(probabilities)
-    # print 'Total probabilities after V = ' + str(totalProbability) + '\n'
-
-    ## dft_T_times_dft_P = getDFTT_dot_DFTP_from_VQFTP(V, V_QFT_P, dft_T, M)
-    ## print 'DFT(T)*DFT(P) = ' + str(dft_T_times_dft_P)
-
-    # ====== iqft =======
-    # IQFT_V_QFT_P = iqft(V_QFT_P)
-    IQFT_V_QFT_T = iqft(V_QFT_T)
-    print 'Amplitudes of qft-Inv (convolution)'
-    # print prettyprint(IQFT_V_QFT_P) + '\n'
-    print prettyprint(IQFT_V_QFT_T) + '\n'
-
-    # probabilities = getProbabilities(IQFT_V_QFT_P)
-    probabilities = getProbabilities(IQFT_V_QFT_T)
-    totalProbability = getTotalProbabilities(probabilities)
-    print 'Convolution Probabilities Per Basis State'
-    print prettyprint(probabilities)
-    print 'Total probabilities after iqft = ' + str(totalProbability) + '\n'
-    print '================================================='
-
-    plotter.title('Probability of Occurence for Convolute')
-    plotter.ylabel('Probability')
-    plotter.xlabel('Basis state index')
-    x = range(dim)
-    width = 0.15
-    plotter.bar(x, probabilities, width, color="black", alpha=0.75)
-    # # plotter.axis([-0.5, 16, 0.0, 1.0])
-    plotter.grid(True)
-    plotter.show()
-
-    # return IQFT_V_QFT_P
-    return IQFT_V_QFT_T
+    return quantum_convolution
 
 
 class StringStateEncoding(object):

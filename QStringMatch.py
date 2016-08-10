@@ -5,7 +5,7 @@ import matplotlib.pyplot as plotter
 from CEncoder import cencode_BIV_a, cencode_BIV_b
 from QDeleter import qdelete_matrix, qdelete_arbitrary
 from QEncoderFinal import qencode
-from QConvolute import qconvolute
+from QConvolute import q_convolute
 from QOperators import qft, iqft, euclid_norm, Euclid_Norm_Squared
 
 def construct_U_M(convolute):
@@ -238,7 +238,7 @@ print '============ ENCODING PHASE END ==============\n'
 
 #=== CONVOLUTE
 print '============ QUANTUM CONVOLUTION PHASE START =\n'
-convolute = qconvolute(encoding_states[0], encoding_states[1])
+convolute = q_convolute(encoding_states[0], encoding_states[1])
 prob_convolute = getProbabilities(convolute)
 print 'Convolute: ' + str(convolute) + '\n'
 print 'Probabilities for convolute: ' + prettyprint_probabilities_simple(prob_convolute[0])
