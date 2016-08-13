@@ -7,8 +7,6 @@
 
 from numpy import zeros, empty, dot
 from math import sqrt
-import matplotlib.pyplot as plotter
-
 from QOperators import qft, iqft, euclid_norm
 
 
@@ -20,7 +18,8 @@ def construct_v(a):
     :return: a unitary matrix with the normalized values of vector a as diagonal elements
     :rtype: ndarray
     """
-    # TODO: construct operator V as tensor product of a decomposition of elementary unitary operators
+    # TODO: Implement algorithm in Markov2004 for synthesizing quantum circuit for arbitrary n-qubit diagonal operators.
+    # This algorithm is asymptotically optimal and will output a circuit containing 2^(n+1) - 3 alternating CNOT gates and 1-qubit Z-axis Bloch sphere rotations R_z(a).
     dim = a.shape[0]
     v = zeros(shape=(dim, dim), dtype=complex)
     for i in xrange(0, dim):
@@ -32,78 +31,78 @@ def construct_v(a):
     return v
 
 
-def constructV_Inv(a):
-    dim = a.shape[0]
-    b = zeros(shape=(dim, dim), dtype=complex)
-    for i in xrange(0, dim):
-        if a[i][i] != 0.0 + 0.0j:
-            b[i][i] = a[i][i].conjugate()
-    return b
-
-
-def getProbabilities(a):
-    dim = a.shape[0]
-    b = empty(dim, dtype=float)
-    for i in xrange(0, dim):
-        b[i] = a[i].real ** 2 + a[i].imag ** 2
-
-    return b
-
-
-def getTotalProbabilities(a):
-    dim = a.shape[0]
-    total = 0.0
-    for i in xrange(0, dim):
-        total = total + a[i]
-
-    return total
-
-
-def getDFTFromQFT(a, strln):
-    dim = a.shape[0]
-    factor = 1.0 / (sqrt(1.0 / dim) * sqrt(1.0 / strln))
-    print 'DFT factor = ' + str(factor)
-    b = empty(dim, dtype=complex)
-    for i in xrange(0, dim):
-        b[i] = complex(factor * a[i].real, factor * a[i].imag)
-
-    return b
-
-
-def getDFTT_dot_DFTP_from_VQFTP(v, vqft_p, dft_t, Pstrln):
-    dim = vqft_p.shape[0]
-    qft_P_factor = (1.0 / (sqrt(1.0 / dim) * sqrt(1.0 / Pstrln)))
-    b = empty(dim, dtype=complex)
-    for i in xrange(0, dim):
-        factor = ((1.0 / v[i][i]) * dft_t[i]) * qft_P_factor
-        b[i] = complex(factor * vqft_p[i].real, factor * vqft_p[i].imag)
-
-    return b
-
-
-def getIDFT_from_IQFT(v, iqft_v, dft_t, dft_p, Pstrln):
-    dim = iqft_v.shape[0]
-    qft_P_factor = 1.0 / (sqrt(1.0 / dim) * sqrt(1.0 / Pstrln))
-    iqft_factor = dim / (sqrt(1.0 / dim))
-    print 'qft_P_factor = ' + str(qft_P_factor)
-    print 'iqft_factor = ' + str(iqft_factor)
-    b = empty(dim, dtype=complex)
-    for j in xrange(0, dim):
-        factor = 0.0
-        for i in xrange(0, dim):
-            factor = factor + iqft_factor * (1.0 / v[i][i]) * dft_t[i] * qft_P_factor
-        b[j] = complex(factor * iqft_v[j].real, factor * iqft_v[j].imag)
-
-    return b
-
-
-def prettyprint(a):
-    dim = a.shape[0]
-    string = ''
-    for i in xrange(0, dim):
-        string = string + '|' + str(i) + '>: ' + str(a[i]) + '\n'
-
-    return string
+# def constructV_Inv(a):
+#     dim = a.shape[0]
+#     b = zeros(shape=(dim, dim), dtype=complex)
+#     for i in xrange(0, dim):
+#         if a[i][i] != 0.0 + 0.0j:
+#             b[i][i] = a[i][i].conjugate()
+#     return b
+#
+#
+# def getProbabilities(a):
+#     dim = a.shape[0]
+#     b = empty(dim, dtype=float)
+#     for i in xrange(0, dim):
+#         b[i] = a[i].real ** 2 + a[i].imag ** 2
+#
+#     return b
+#
+#
+# def getTotalProbabilities(a):
+#     dim = a.shape[0]
+#     total = 0.0
+#     for i in xrange(0, dim):
+#         total = total + a[i]
+#
+#     return total
+#
+#
+# def getDFTFromQFT(a, strln):
+#     dim = a.shape[0]
+#     factor = 1.0 / (sqrt(1.0 / dim) * sqrt(1.0 / strln))
+#     print 'DFT factor = ' + str(factor)
+#     b = empty(dim, dtype=complex)
+#     for i in xrange(0, dim):
+#         b[i] = complex(factor * a[i].real, factor * a[i].imag)
+#
+#     return b
+#
+#
+# def getDFTT_dot_DFTP_from_VQFTP(v, vqft_p, dft_t, Pstrln):
+#     dim = vqft_p.shape[0]
+#     qft_P_factor = (1.0 / (sqrt(1.0 / dim) * sqrt(1.0 / Pstrln)))
+#     b = empty(dim, dtype=complex)
+#     for i in xrange(0, dim):
+#         factor = ((1.0 / v[i][i]) * dft_t[i]) * qft_P_factor
+#         b[i] = complex(factor * vqft_p[i].real, factor * vqft_p[i].imag)
+#
+#     return b
+#
+#
+# def getIDFT_from_IQFT(v, iqft_v, dft_t, dft_p, Pstrln):
+#     dim = iqft_v.shape[0]
+#     qft_P_factor = 1.0 / (sqrt(1.0 / dim) * sqrt(1.0 / Pstrln))
+#     iqft_factor = dim / (sqrt(1.0 / dim))
+#     print 'qft_P_factor = ' + str(qft_P_factor)
+#     print 'iqft_factor = ' + str(iqft_factor)
+#     b = empty(dim, dtype=complex)
+#     for j in xrange(0, dim):
+#         factor = 0.0
+#         for i in xrange(0, dim):
+#             factor = factor + iqft_factor * (1.0 / v[i][i]) * dft_t[i] * qft_P_factor
+#         b[j] = complex(factor * iqft_v[j].real, factor * iqft_v[j].imag)
+#
+#     return b
+#
+#
+# def prettyprint(a):
+#     dim = a.shape[0]
+#     string = ''
+#     for i in xrange(0, dim):
+#         string = string + '|' + str(i) + '>: ' + str(a[i]) + '\n'
+#
+#     return string
 
 
 def q_convolute(text_state_encoding, pattern_state_encoding):
