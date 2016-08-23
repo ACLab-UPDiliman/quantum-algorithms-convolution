@@ -79,8 +79,8 @@ def compute_probability_distribution(convolution):
 
 
 def is_solution(index, _text, _pattern, distance):
-    print 'Comparing T[', index, ':', (index + len(_pattern)), ']=', _text[index: index + len(
-        _pattern)], ' and P=', _pattern
+    print 'Comparing text[', index, ':', (index + len(_pattern)), ']=', _text[index: index + len(
+        _pattern)], ' and pattern=', _pattern
     comparison = [1 if t_symbol == p_symbol else 0 for t_symbol, p_symbol in
                   zip(_text[index: index + len(_pattern)], _pattern)]
     if comparison.count(0) > distance:
@@ -127,14 +127,14 @@ for run in range(total_run_count):
             print '\n\nCurrent iteration count:', iteration, '\n'
             # Generate text and pattern.
             text = generate_random_string(text_length, alphabet)
-            print 'T:', text
+            print 'text:', text
             # Randomly generate index of pattern in text.
             a = range(text_length - pattern_length + 1)
             # print 'a:', a
             pattern_index = random.choice(a, p = [1.0/len(a) for i in range(len(a))])
             print 'pattern_index:', pattern_index
             pattern = text[pattern_index : pattern_index + pattern_length]
-            print 'P:', pattern
+            print 'pattern:', pattern
 
             #########################################################################
 

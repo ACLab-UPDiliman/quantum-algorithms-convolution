@@ -210,11 +210,11 @@ class FilteringPhaseRegister(object):
 		super(FilteringPhaseRegister, self).__init__()
 		self.amplitude = amplitude 
 		
-		# -index in text T
+		# -index in text text
 		# -valid values range from 0 to N-1
 		self.indexRegister = indexRegister
 		
-		# -starting index of a possble solution substring in text T
+		# -starting index of a possble solution substring in text text
 		# -expressed as a list of bits representing the starting index with the rightmost bit as the most significant bit
 		self.startingLocationRegister = startingLocationRegister 
 		
@@ -235,8 +235,8 @@ class FilteringPhaseRegister(object):
 	def getStartingLocationRegisterBasisVector(self):
 		return convertToBasisVectorFromBinaryNumber(BinaryNumber(self.startingLocationRegister))
 
-	# -Fetch location of first occurrence in pattern P of the symbol located in the index represented by the binary state of the indexRegister 
-	# -Return the location of first occurrence in pattern P as a list of bits
+	# -Fetch location of first occurrence in pattern pattern of the symbol located in the index represented by the binary state of the indexRegister
+	# -Return the location of first occurrence in pattern pattern as a list of bits
 	def identifyLocationOfFirstOccurrence(self):
 		# print 'FilteringPhaseRegister: identifyLocationOfFirstOccurrence: self.getIndexRegisterBasisVector():', self.getIndexRegisterBasisVector()
 		# print 'FilteringPhaseRegister: identifyLocationOfFirstOccurrence: self.getStartingLocationRegisterBasisVector():', self.getStartingLocationRegisterBasisVector()
@@ -245,8 +245,8 @@ class FilteringPhaseRegister(object):
 		self.startingLocationRegister = convertToBinaryStringFromBasisVector(locationOperator.identifyLocationOfFirstOccurrence(basisVector).tolist(), registerBitCount) # list of 0s and 1s representing binary state of startingLocationRegister
 		# print 'FilteringPhaseRegister: identifyLocationOfFirstOccurrence: new basisVector:', self.startingLocationRegister
 
-	# -Compute for possible starting location of pattern P in text T given the index represented by the state of the indexRegister and the location of first occurrence
-	#	in pattern P
+	# -Compute for possible starting location of pattern pattern in text text given the index represented by the state of the indexRegister and the location of first occurrence
+	#	in pattern pattern
 	def computeStartingLocation(self):
 		# get the negative representation of the location represented by the state of locationRegister
 		startingLocationRegisterStateTwosComplement = getTwosComplement(self.startingLocationRegister)
@@ -782,7 +782,7 @@ class DiffusionOperator(object):
  		print 'DiffusionOperator: Total probability:', totalProbability
 
 class ULocOperator(object):
-	"""Unitary operator for fetching location of first occurrence of a symbol T[textIndex] in pattern P."""
+	"""Unitary operator for fetching location of first occurrence of a symbol text[textIndex] in pattern pattern."""
 	def __init__(self, text, pattern, symbolSet, locationSet):
 		super(ULocOperator, self).__init__()
 		textLength = len(text) # should have referred to global variable N instead
@@ -792,9 +792,9 @@ class ULocOperator(object):
 		self.matrix = zeros((matrixDimension, matrixDimension), dtype=int)
 		for textIndex in xrange(0, textLength):
 			if text[textIndex] in symbolSet:
-				# print "T["+str(textIndex)+"]: ", text[textIndex], " available in P_Sym and is at index " + str(symbolSet.index(text[textIndex])) + "."
-				symbolSetIndex = symbolSet.index(text[textIndex]) # index of symbol T[textIndex] in list P_Sym
-				locationSetIndex = locationSet[symbolSetIndex] # since P_Sym and P_Loc have same number of elements then the location of first occurrence in P of symbol T[textIndex] is at location P_Loc[symbolSetIndex]
+				# print "text["+str(textIndex)+"]: ", text[textIndex], " available in pattern_alphabet and is at index " + str(symbolSet.index(text[textIndex])) + "."
+				symbolSetIndex = symbolSet.index(text[textIndex]) # index of symbol text[textIndex] in list pattern_alphabet
+				locationSetIndex = locationSet[symbolSetIndex] # since pattern_alphabet and pattern_symbol_locations have same number of elements then the location of first occurrence in pattern of symbol text[textIndex] is at location pattern_symbol_locations[symbolSetIndex]
 				self.matrix[textIndex * textLength][(textIndex * textLength) + locationSetIndex] = 1
 				self.matrix[(textIndex * textLength) + locationSetIndex][textIndex * textLength] = 1
 				for patternIndex in xrange(0, patternLength):
@@ -803,7 +803,7 @@ class ULocOperator(object):
 				for index in xrange(patternLength, pow(2,registerBitCount)):
 					self.matrix[(textIndex * textLength) + index][(textIndex * textLength) + index] = 1
 			else:
-				# print "T["+str(textIndex)+"]: ", text[textIndex], " not available in P_sym."
+				# print "text["+str(textIndex)+"]: ", text[textIndex], " not available in P_sym."
 				for index in xrange(0, pow(2,registerBitCount)):
 					self.matrix[(textIndex * textLength) + index][(textIndex * textLength) + index] = 1 # just an identity operator
 
@@ -921,24 +921,24 @@ def ket0():
 def ket1():
 	return array([0,1])
 
-# Construct list of distinct symbols in pattern P
+# Construct list of distinct symbols in pattern pattern
 def constructP_Sym(pattern):
-# Given P, setify P to get all distinct symbols in P convert the set into a list by
+# Given pattern, setify pattern to get all distinct symbols in pattern convert the set into a list by
 # listifying it. Sortification is not necessary actually.
 	return list(set(pattern))
 
-# Construct a map with location of first occurrence of symbol in P_Sym as key and the symbol value
+# Construct a map with location of first occurrence of symbol in pattern_alphabet as key and the symbol value
 def constructP_Loc(symbolSet):
-# there are many ways to construct P_Loc using Python's list comprehension feature but
+# there are many ways to construct pattern_symbol_locations using Python's list comprehension feature but
 # using map we explicitly say that there is a one-to-one and onto mapping between 
-# P_Sym and P_Loc
+# pattern_alphabet and pattern_symbol_locations
 
 	# a convenience constructor for map where first parameter
 	# is method for determining location of first occurrence as 
 	# key and second parameter is method for the value
 	return map(getFirstLoc,symbolSet) 
 
-# Get the location of first occurrence of symbol x in pattern P
+# Get the location of first occurrence of symbol x in pattern pattern
 def getFirstLoc(x):
 	return pattern.index(x)
 
@@ -955,18 +955,18 @@ logging.info('Input pattern: '+pattern)
 
 
 # FILTERING PHASE ==================================================
-# Construct set of distinct symbol in P, P_Sym
-logging.info('Constructing set P_Sym.')
+# Construct set of distinct symbol in pattern, pattern_alphabet
+logging.info('Constructing set pattern_alphabet.')
 P_Sym = constructP_Sym(pattern)
-print 'P_Sym: ', P_Sym, ", q=", str(len(P_Sym))
+print 'pattern_alphabet: ', P_Sym, ", q=", str(len(P_Sym))
 
-# Construct set of locations of first occurrence in P of
-# all symbols in set P_Sym
-logging.info('Constructing set P_Loc.')  
+# Construct set of locations of first occurrence in pattern of
+# all symbols in set pattern_alphabet
+logging.info('Constructing set pattern_symbol_locations.')
 P_Loc = constructP_Loc(P_Sym)
-print 'P_Loc: ', P_Loc
+print 'pattern_symbol_locations: ', P_Loc
 
-# Construct operator for identifying location of first occurrence of each symbol T[i] in pattern P
+# Construct operator for identifying location of first occurrence of each symbol text[i] in pattern pattern
 locationOperator = ULocOperator(text, pattern, P_Sym, P_Loc) # TODO: Prepare ULocOperator in the initialization phase instead
 
 logging.info('Preparing initial superposition state.')
@@ -985,21 +985,21 @@ for filteringPhaseRegister in searchSpaceRegister:
 print '======================================================='
 
 
-logging.info('Identifying location of first occurrence of symbols in text T.')
-# Identify location of first occurrence P_Loc(i) for each symbol T[i] in text T
+logging.info('Identifying location of first occurrence of symbols in text text.')
+# Identify location of first occurrence pattern_symbol_locations(i) for each symbol text[i] in text text
 for filteringPhaseRegister in searchSpaceRegister:
 	filteringPhaseRegister.identifyLocationOfFirstOccurrence()
-logging.info('Location of first occurrence of symbols in text T identified.')
+logging.info('Location of first occurrence of symbols in text text identified.')
 print 'FilteringPhaseRegisters: =============================='
 for filteringPhaseRegister in searchSpaceRegister:
 	print filteringPhaseRegister.toString()
 print '======================================================='
 
-logging.info('Identifying possible starting locations in text T.')
-# Compute for possible starting location (i - P_Loc(i))
+logging.info('Identifying possible starting locations in text text.')
+# Compute for possible starting location (i - pattern_symbol_locations(i))
 for filteringPhaseRegister in searchSpaceRegister:
 	filteringPhaseRegister.computeStartingLocation()
-logging.info('Possible starting locations in text T identified.')
+logging.info('Possible starting locations in text text identified.')
 # print 'FilteringPhaseRegisters: =============================='
 # for filteringPhaseRegister in searchSpaceRegister:
 # 	print filteringPhaseRegister.toString()

@@ -118,16 +118,16 @@ def qencode(T,P):
 	# print 'QRegP with deleted padding basis states: ' + str(qRegP_state)
 	# print '===================================='
 
-	# encoding of T into state of QRegT
-	# U = U_f(dim_T,dim_P, T)
+	# encoding of text into state of QRegT
+	# U = U_f(dim_T,dim_P, text)
 	# qRegT_state = dot(U,qRegT_state)
 	# print '===================================='
-	# print 'Encoding of T into state of QRegT: ' + str(qRegT_state)
-	# encoding of P into state of QRegP
+	# print 'Encoding of text into state of QRegT: ' + str(qRegT_state)
+	# encoding of pattern into state of QRegP
 
-	# U = U_g(dim_T,dim_P, P)
+	# U = U_g(dim_T,dim_P, pattern)
 	# qRegP_state = dot(U,qRegP_state)
-	# print 'Encoding of P into state of QRegP: ' + str(qRegP_state)
+	# print 'Encoding of pattern into state of QRegP: ' + str(qRegP_state)
 	# print '===================================='
 
 	# qRegT_state = array([0,0,sqrt(1.0/3),sqrt(1.0/3),sqrt(1.0/3),0,0,0])
@@ -135,10 +135,10 @@ def qencode(T,P):
 	return array([qRegT_state,qRegP_state])
 
 # ===================================
-# T = ['b','b','a']
-# P = ['b','a']
+# text = ['b','b','a']
+# pattern = ['b','a']
 
-# qencode(T,P)
+# qencode(text,pattern)
 
 
 

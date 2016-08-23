@@ -112,7 +112,7 @@ def prettyprint_probabilities(a):
 			pad = pad + '0'
 			if (b[i][0] + (2-M)) < 10:
 				pad = pad + '0'
-		print 'printing for T[ ' + str(b[i][0] + (2-M) - 1) + ' ]'
+		print 'printing for text[ ' + str(b[i][0] + (2-M) - 1) + ' ]'
 		
 		if (b[i][0] + (2-M)) > 0 and ((b[i][0] + (2-M)) <= (N-M+1)):
 			string = string + '\n[' + pad + str(b[i][0] + (2-M)) +'] : ' + str(T[b[i][0] + (2-M) - 1 : b[i][0] + 1]) + ' : ' + str(b[i][1])
@@ -185,11 +185,11 @@ def slice_probabilities(a):
 	return b
 
 #=== INPUT
-# sample input T and P
+# sample input text and pattern
 T = [ 'a', 'a', 'b', 'b', 'b', 'a' ]
 P = [ 'b', 'b', 'a' ]
 
-# T = [
+# text = [
 # 		'b','a','a','a','b','b','b','b','b','b',
 # 		'b','b','b','b','b','b','b','b','b','b',
 # 		'b','b','b','b','b','b','b','b','b','b',
@@ -204,20 +204,20 @@ P = [ 'b', 'b', 'a' ]
 # 		'b','b','b','b','b','b','b','b','b','b',
 # 		'b','b','a','a','a'
 # 	]
-# P = ['b','a','a','a']
+# pattern = ['b','a','a','a']
 
 N = len(T)
 M = len(P)
 dim = N+M-1
 mid_dim = N-M+1
-print 'T: ' + str(T) + ', N = ' + str(N)
-print 'P: ' + str(P) + ', M = ' + str(M)
+print 'text: ' + str(T) + ', N = ' + str(N)
+print 'pattern: ' + str(P) + ', M = ' + str(M)
 print 'dim: ' + str(dim) + ', middle dim: ' + str(mid_dim)
 
 #=== ENCODE
-# encode T and P into quantum states
+# encode text and pattern into quantum states
 print '============ ENCODING PHASE START ============\n'
-# BIV_encoded_strings = cencode_BIV_b(T,P)
+# BIV_encoded_strings = cencode_BIV_b(text,pattern)
 # T_cencoded = BIV_encoded_strings[0]
 # P_cencoded = BIV_encoded_strings[1]
 # encoding_states = qencode(T_cencoded,P_cencoded)
@@ -228,12 +228,12 @@ encoding_states = array([[0.0,0.0,sqrt(1.0/3.0),sqrt(1.0/3.0),sqrt(1.0/3.0),0.0,
 # encoding_states = array([[0.0,0.0,1.0,1.0,1.0,0.0,0.0,0.0],[0.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0]])
 prob_T = getProbabilities(encoding_states[0])
 prob_P = getProbabilities(encoding_states[1])
-print 'Encoding state for T: ' + prettyprint_probabilities_simple(encoding_states[0])
-print 'Encoding state for P: ' + prettyprint_probabilities_simple(encoding_states[1]) + '\n'
-print 'Probabilities for T: ' + prettyprint_probabilities_simple(prob_T[0])
-print 'Total probability for T: ' + str(prob_T[1]) + '\n'
-print 'Probabilities for P:' + prettyprint_probabilities_simple(prob_P[0])
-print 'Total probability for P: ' + str(prob_P[1])
+print 'Encoding state for text: ' + prettyprint_probabilities_simple(encoding_states[0])
+print 'Encoding state for pattern: ' + prettyprint_probabilities_simple(encoding_states[1]) + '\n'
+print 'Probabilities for text: ' + prettyprint_probabilities_simple(prob_T[0])
+print 'Total probability for text: ' + str(prob_T[1]) + '\n'
+print 'Probabilities for pattern:' + prettyprint_probabilities_simple(prob_P[0])
+print 'Total probability for pattern: ' + str(prob_P[1])
 print '============ ENCODING PHASE END ==============\n'
 
 #=== CONVOLUTE
@@ -246,7 +246,7 @@ print 'Total probability for convolute: ' + str(prob_convolute[1])
 print '============ QUANTUM CONVOLUTION PHASE END ===\n'
 
 # # # corresponds to adding M to each element of vector z and dividing the 
-# # # resulting value by 2 to get the match count at each index of T
+# # # resulting value by 2 to get the match count at each index of text
 print '============ ADJUSTMENT PHASE START ==========\n'
 # # U_z = constructU_z(convolute, encoding_states[0])
 # # vector_c = dot(U_z,convolute)

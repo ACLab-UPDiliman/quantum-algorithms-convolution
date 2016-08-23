@@ -103,10 +103,10 @@ T = ['b','b','a']
 N = len(T)
 P = ['b','a']
 P.reverse()
-print 'P reversed = ' + str(P)
+print 'pattern reversed = ' + str(P)
 M = len(P)
-print 'Length of T = ' + str(N)
-print 'Length of P = ' + str(M)
+print 'Length of text = ' + str(N)
+print 'Length of pattern = ' + str(M)
 
 S_T_Matrix = S_T_Matrix(N,M)
 print '4x4 S_T Matrix = '
@@ -142,15 +142,15 @@ S_T_Matrix_dot_H_dot_T_qubit1_kron_H_dot_T_qubit2 = dot(S_T_Matrix, H_dot_T_qubi
 normalized_state_T = normalize_T(S_T_Matrix_dot_H_dot_T_qubit1_kron_H_dot_T_qubit2, N, M)
 encoding_state_T = dot(U_f_Matrix, normalized_state_T)
 # A_dot_S_T_Matrix_dot_H_dot_T_qubit1_kron_H_dot_T_qubit2 = dot(A_Matrix, S_T_Matrix_dot_H_dot_T_qubit1_kron_H_dot_T_qubit2)
-print '======== Encoding T into quantum superposition state ======='
+print '======== Encoding text into quantum superposition state ======='
 print 'H_dot_T_qubit1 = ' + str(H_dot_T_qubit1)
 print 'H_dot_T_qubit2 = ' + str(H_dot_T_qubit2)
 print 'X_dot_T_ancilla = ' + str(X_dot_T_ancilla)
 print 'H_dot_X_dot_T_ancilla = ' + str(H_dot_X_dot_T_ancilla)
 print 'H_dot_T_qubit1_kron_H_dot_T_qubit2 = ' + str(H_dot_T_qubit1_kron_H_dot_T_qubit2)
 print 'S_T_Matrix_dot_H_dot_T_qubit1_kron_H_dot_T_qubit2 = ' + str(S_T_Matrix_dot_H_dot_T_qubit1_kron_H_dot_T_qubit2)
-print 'Normalized State for T = ' + str(normalized_state_T)
-print 'Encoding State for T = ' + str(encoding_state_T)
+print 'Normalized State for text = ' + str(normalized_state_T)
+print 'Encoding State for text = ' + str(encoding_state_T)
 
 
 #===== Pattern ======
@@ -167,15 +167,15 @@ S_P_Matrix_dot_H_dot_P_qubit1_kron_H_dot_P_qubit2 = dot(S_P_Matrix, H_dot_P_qubi
 normalized_state_P = normalize_P(S_P_Matrix_dot_H_dot_P_qubit1_kron_H_dot_P_qubit2, N, M)
 encoding_state_P = dot(U_g_Matrix, normalized_state_P)
 
-print '======== Encoding P into quantum superposition state ======='
+print '======== Encoding pattern into quantum superposition state ======='
 print 'H_dot_P_qubit1 = ' + str(H_dot_P_qubit1)
 print 'H_dot_P_qubit2 = ' + str(H_dot_P_qubit2)
 print 'X_dot_P_ancilla = ' + str(X_dot_P_ancilla)
 print 'H_dot_X_dot_P_ancilla = ' + str(H_dot_X_dot_P_ancilla)
 print 'H_dot_P_qubit1_kron_H_dot_P_qubit2 = ' + str(H_dot_P_qubit1_kron_H_dot_P_qubit2)
 print 'S_P_Matrix_dot_H_dot_P_qubit1_kron_H_dot_P_qubit2 = ' + str(S_P_Matrix_dot_H_dot_P_qubit1_kron_H_dot_P_qubit2)
-print 'Normalized State for P = ' + str(normalized_state_P)
-print 'Encoding State for P = ' + str(encoding_state_P)
+print 'Normalized State for pattern = ' + str(normalized_state_P)
+print 'Encoding State for pattern = ' + str(encoding_state_P)
 
 #================================= Convolution =================================
 
